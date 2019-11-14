@@ -1,0 +1,14 @@
+mat-expansion-panel {
+  margin: 5px 0;
+}
+
+.info-text {
+  text-align: center;
+}
+
+.content {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  justify-content: space-between;
+}
