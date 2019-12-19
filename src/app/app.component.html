@@ -1,5 +1,5 @@
 <app-header></app-header>
 <main>
-  <app-post-create (newPostEmitter)="onAddPost($event)"></app-post-create>
-  <app-post-list [posts]="posts"></app-post-list>
+  <app-post-create (newPostEmitter)="postsFacade.addNewPost($event)"></app-post-create>
+  <app-post-list [posts]="postsFacade.posts$ | async"></app-post-list>
 </main>

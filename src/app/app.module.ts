@@ -1,3 +1,5 @@
+import { UserFacade } from './facades/user.facade';
+import { PostsFacade } from './facades/posts.facade';
 import { environment } from './../environments/environment.prod';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';

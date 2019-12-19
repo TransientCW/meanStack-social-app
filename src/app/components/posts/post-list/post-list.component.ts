@@ -1,3 +1,4 @@
+import { PostsFacade } from './../../../facades/posts.facade';
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { Post } from 'src/app/models/post.model';
 
@@ -7,5 +8,5 @@ import { Post } from 'src/app/models/post.model';
   styleUrls: ['./post-list.component.scss']
 })
 export class PostListComponent {
-  @Input() posts: any;
+  @Input() posts: Post[];
 }

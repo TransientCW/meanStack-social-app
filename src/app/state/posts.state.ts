@@ -14,6 +14,16 @@ export const setPosts = createAction(
   props<{ currentPosts: Post[] }>()
 );
 
+export const addNewPost = createAction(
+  '[Posts] Add New Post',
+  props<{ post: Post }>()
+);
+
+export const removePost = createAction(
+  '[Post] Remove Post',
+  props<{ post: Post }>()
+);
+
 export interface IPostsState {
   posts: Post[];
 }
@@ -27,7 +37,13 @@ const reducer = createReducer(
   on(setPosts, (state, { currentPosts }) => {
     return {
       ...state,
-      posts: [...currentPosts]
+      posts: currentPosts
+    };
+  }),
+  on(addNewPost, (state, { post }) => {
+    return {
+      ...state,
+      posts: [...state.posts, post]
     };
   })
 );
@@ -44,4 +60,4 @@ export const mapToPosts = (state: IPostsState): Post[] => {
   return state.posts;
 };
 
-export const posts = createSelector(mapToRootState, mapToPosts);
+export const getPostsSelector = createSelector(mapToRootState, mapToPosts);
