@@ -9,4 +9,5 @@ import { Post } from 'src/app/models/post.model';
 })
 export class PostListComponent {
   @Input() posts: Post[];
+  @Output() deletePostEmitter = new EventEmitter<Post>();
 }
