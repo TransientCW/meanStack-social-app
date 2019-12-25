@@ -1,3 +1,4 @@
+import { fetchPosts } from './../state/posts.state';
 import { Store } from '@ngrx/store';
 
 import { Observable } from 'rxjs';
@@ -14,6 +15,10 @@ export class PostsFacade {
 
   public get posts$(): Observable<Post[]> {
     return this.store.select(getPostsSelector);
+  }
+
+  public fetchPosts(): void {
+    this.store.dispatch(fetchPosts());
   }
 
   public addNewPost(post: Post): void {

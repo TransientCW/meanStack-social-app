@@ -1,5 +1,5 @@
 import { PostsFacade } from './facades/posts.facade';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Post } from './models/post.model';
 
 @Component({
@@ -7,6 +7,10 @@ import { Post } from './models/post.model';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   constructor(private postsFacade: PostsFacade) {}
+
+  ngOnInit() {
+    this.postsFacade.fetchPosts();
+  }
 }

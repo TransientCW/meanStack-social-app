@@ -1,4 +1,4 @@
-<mat-accordion *ngIf="posts.length > 0; else noPosts">
+<mat-accordion *ngIf="posts && posts.length > 0; else noPosts" multi="true">
   <mat-expansion-panel *ngFor="let post of posts">
     <mat-expansion-panel-header>
       <mat-panel-title>
@@ -7,11 +7,12 @@
     </mat-expansion-panel-header>
     <div class="content">
       <span>{{ post.content }}</span>
-      <span>
+      <mat-action-row>
         <mat-icon
         (click)="deletePostEmitter.emit(post)"
         >delete</mat-icon>
-      </span>
+        <mat-icon (click)="editPostEmitter.emit(post)">edit</mat-icon>
+      </mat-action-row>
     </div>
   </mat-expansion-panel>
 </mat-accordion>
