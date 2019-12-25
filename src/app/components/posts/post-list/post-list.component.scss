@@ -13,6 +13,10 @@ mat-expansion-panel {
   justify-content: space-between;
 }
 
+mat-icon {
+  margin: 0 10px;
+}
+
 mat-icon:hover {
   cursor: pointer
 }

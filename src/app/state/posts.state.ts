@@ -9,6 +9,18 @@ import {
 } from '@ngrx/store';
 import { IRootState } from '.';
 
+export const fetchPosts = createAction('[Posts] Fetch All Posts');
+
+export const fetchPostsSuccess = createAction(
+  '[Posts] Fetch All Posts Success',
+  props<{ posts: Post[] }>()
+);
+
+export const fetchPostsFailure = createAction(
+  '[Posts] Fetch All Posts Failure',
+  props<{ error: string }>()
+);
+
 export const setPosts = createAction(
   '[Posts] Set Posts',
   props<{ currentPosts: Post[] }>()
@@ -34,6 +46,12 @@ export const initialPostsState = {
 
 const reducer = createReducer(
   initialPostsState,
+  on(fetchPostsSuccess, (state, { posts }) => {
+    return {
+      ...state,
+      posts
+    };
+  }),
   on(setPosts, (state, { currentPosts }) => {
     return {
       ...state,
