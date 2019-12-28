@@ -8,9 +8,10 @@ import {
   map,
   switchMap,
   catchError,
-  tap
+  tap,
+  mergeMap
 } from 'rxjs/operators';
-import { of } from 'rxjs';
+import { of, iif, defer } from 'rxjs';
 
 import {
   removePost,
@@ -19,11 +20,13 @@ import {
   fetchPosts,
   fetchPostsSuccess,
   fetchPostsFailure,
-  addNewPost
+  addNewPost,
+  removePostSuccess,
+  removePostFailure
 } from './posts.state';
 import { IRootState } from '.';
 import { PostsService } from './../services/posts.service';
-import { Post } from '../models/post.model';
+import { Post, PostsFetch } from '../models/post.model';
 
 @Injectable()
 export class PostsEffects {
@@ -39,8 +42,14 @@ export class PostsEffects {
       map(action => action.post),
       switchMap(post => {
         return this.postsService.addNewPost(post).pipe(
-          filter(data => !!data.posts),
-          map(data => fetchPostsSuccess({ posts: data.posts })),
+          map((data: PostsFetch) => data.posts.map(post => {
+            return {
+              title: post.title,
+              content: post.content,
+              id: post._id
+            };
+          })),
+          map(posts => fetchPostsSuccess({ posts })),
           catchError(error => of(fetchPostsFailure({ error })))
         );
       })
@@ -52,21 +61,45 @@ export class PostsEffects {
       ofType(fetchPosts),
       switchMap(() => {
         return this.postsService.fetchPosts().pipe(
-          tap((posts: Post[]) => console.log('POSTS: ', posts)),
-          map((posts: Post[]) => fetchPostsSuccess({ posts })),
-          catchError(error => of(fetchPostsFailure({ error })))
+          map((data: PostsFetch) => data.posts.map(post => {
+            return {
+              title: post.title,
+              content: post.content,
+              id: post._id
+            }
+          })),
+          map(posts => fetchPostsSuccess({posts})),
+          catchError(error => of(fetchPostsFailure({error})))
         );
       })
     )
   );
 
-  removePost$ = createEffect(() =>
-    this.actions$.pipe(
-      ofType(removePost),
-      withLatestFrom(this.store.select(getPostsSelector)),
-      filter(([, posts]) => !!posts && posts.length > 0),
-      map(([{ post }, posts]) => posts.filter(p => p.id !== post.id)),
-      map(currentPosts => setPosts({ currentPosts }))
-    )
+  removePost$ = createEffect(() => 
+      this.actions$.pipe(
+        ofType(removePost),
+        switchMap(({id}) => {
+          return this.postsService.removePost(id).pipe(
+            map((message) => ({...message, id})),
+            switchMap((values) => {
+              return iif(
+                () => values.message === 'Delete success',
+                of(removePostSuccess({id: values.id})),
+                of(removePostFailure())
+              )
+            })
+          )
+        })
+      )
+  );
+
+  removePostSuccess$ = createEffect(() =>
+        this.actions$.pipe(
+          ofType(removePostSuccess),
+          withLatestFrom(this.store.select(getPostsSelector)),
+          filter(([, posts]) => !!posts && posts.length > 0),
+          map(([{id},posts]) => ({filtered: posts.filter(p => p.id !== id)})),
+          map(({filtered}) => setPosts({currentPosts: filtered}))
+        )
   );
 }

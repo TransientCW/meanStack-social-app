@@ -12,6 +12,11 @@
         (click)="deletePostEmitter.emit(post)"
         >delete</mat-icon>
         <mat-icon (click)="editPostEmitter.emit(post)">edit</mat-icon>
+        <mat-progress-spinner
+          *ngIf="postsFacade.isPostDeleting$ | async"
+          color="primary"
+          mode="indeterminate"  
+          ></mat-progress-spinner>
       </mat-action-row>
     </div>
   </mat-expansion-panel>

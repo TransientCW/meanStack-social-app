@@ -4,7 +4,7 @@ import { Injectable, Inject } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { environment } from 'src/environments/environment';
-import { Post } from '../models/post.model';
+import { Post, PostsFetch } from '../models/post.model';
 
 @Injectable({ providedIn: 'root' })
 export class PostsService {
@@ -12,13 +12,17 @@ export class PostsService {
 
   constructor(@Inject(HttpClient) private http: HttpClient) {}
 
-  public fetchPosts(): Observable<Post[]> {
-    return this.http.get<Post[]>(this.url);
+  public fetchPosts(): Observable<PostsFetch> {
+    return this.http.get<PostsFetch>(this.url);
   }
 
   public addNewPost(
     post: Post
-  ): Observable<{ message: string; posts: Post[] }> {
-    return this.http.post<{ message: string; posts: Post[] }>(this.url, post);
+  ): Observable<PostsFetch> {
+    return this.http.post<PostsFetch>(this.url, post);
+  }
+
+  public removePost(id: string): Observable<{message: string}> {
+    return this.http.delete<{message: string}>(this.url + '/' + id);
   }
 }

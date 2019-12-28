@@ -1,4 +1,4 @@
-import { fetchPosts } from './../state/posts.state';
+import { fetchPosts, getIsPostDeletingSelector } from './../state/posts.state';
 import { Store } from '@ngrx/store';
 
 import { Observable } from 'rxjs';
@@ -17,6 +17,10 @@ export class PostsFacade {
     return this.store.select(getPostsSelector);
   }
 
+  public get isPostDeleting$(): Observable<boolean> {
+    return this.store.select(getIsPostDeletingSelector);
+  }
+
   public fetchPosts(): void {
     this.store.dispatch(fetchPosts());
   }
@@ -27,9 +31,9 @@ export class PostsFacade {
     }
   }
 
-  public removePost(post: Post): void {
-    if (post) {
-      this.store.dispatch(removePost({ post }));
+  public removePost(id: string): void {
+    if (id) {
+      this.store.dispatch(removePost({ id }));
     }
   }
 }

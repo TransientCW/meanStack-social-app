@@ -4,13 +4,14 @@ import { FormsModule } from '@angular/forms';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import {
-  MatInputModule,
-  MatIconModule,
   MatButtonModule,
   MatCardModule,
   MatExpansionModule,
-  MatToolbarModule,
-  MatSnackBarModule
+  MatIconModule,
+  MatInputModule,
+  MatProgressSpinnerModule,
+  MatSnackBarModule,
+  MatToolbarModule
 } from '@angular/material';
 
 import { AppComponent } from './app.component';
@@ -34,14 +35,15 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
   ],
   imports: [
     BrowserModule,
-    FormsModule,
     BrowserAnimationsModule,
+    FormsModule,
     HttpClientModule,
     MatButtonModule,
     MatCardModule,
     MatExpansionModule,
     MatIconModule,
     MatInputModule,
+    MatProgressSpinnerModule,
     MatSnackBarModule,
     MatToolbarModule,
     StoreModule.forRoot(reducers, {

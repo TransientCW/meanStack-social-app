@@ -11,4 +11,6 @@ export class PostListComponent {
   @Input() posts: Post[];
   @Output() deletePostEmitter = new EventEmitter<Post>();
   @Output() editPostEmitter = new EventEmitter<Post>();
+
+  constructor(private postsFacade: PostsFacade) {}
 }

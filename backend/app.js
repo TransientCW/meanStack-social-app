@@ -1,9 +1,20 @@
 const express = require('express');
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
+
+// Import post model
+const PostModel = require('./models/Post')
 
 // Create the express app
 const app = express();
+
+// Connect to db
+mongoose.connect(`mongodb+srv://transientcw:14623361aZ!aZ@@cluster0-iqevz.mongodb.net/mean-social-app?retryWrites=true&w=majority`, {useNewUrlParser: true}).then(() => {
+  console.log('Connected to db!');
+}).catch((err) => {
+  console.log('Error connecting to db: ', err);
+});
 
 // Log it!
 app.use(morgan('dev'));
@@ -20,11 +31,10 @@ app.use(function(req, res, next) {
   );
   res.setHeader(
     'Access-Control-Allow-Methods',
+    'DELETE',
     'GET',
     'POST',
     'PATCH',
-    'DELETE',
-    'OPTIONS',
     'PUT'
   );
   next();
@@ -32,29 +42,45 @@ app.use(function(req, res, next) {
 
 // Posts GET route
 app.get('/api/posts', (req, res) => {
-  let posts = [
-    { id: 1, title: 'post1', content: 'This came from server' },
-    { id: 2, title: 'post2', content: 'This also came from server' }
-  ];
-  res.status(200).json(posts);
+  PostModel.find().then(posts => {
+    res.status(200).json({
+      message: 'Posts fetch success',
+      posts
+    })
+  })
 });
 
 // Posts POST route
 app.post('/api/posts', (req, res) => {
-  let posts = [
-    { id: 1, title: 'post1', content: 'This came from server' },
-    { id: 2, title: 'post2', content: 'This also came from server' }
-  ];
-  // for now since we dont have a db, lets just log
-  console.log('Post received: ', req.body);
-  const post = req.body;
-  post.id = 3;
-  posts.push(post);
-  res.status(201).json({
-    message: 'Post added!',
-    posts
+  const post = new PostModel({
+    title: req.body.title,
+    content: req.body.content
   });
-  // res.status(200).json(posts);
+  // Keep in mind, the collection used is going to be your model name, plural (Posts) in our case
+  post.save().then(
+    PostModel.find({}).then((posts) => {
+      posts.push(post);
+      res.status(200).json({
+        message: 'Posts',
+        posts: posts
+      })
+    })
+  );
+});
+
+// Posts DELETE route
+app.delete('/api/posts/:id', (req, res) => {
+  PostModel.deleteOne({_id: req.params.id}).then(status => {
+    if (status.ok === 1) {
+      res.status(201).json({
+        message: 'Delete success'
+      })
+    } else {
+      res.status(500).json({
+        message: 'Deletion error on server'
+      });
+    }
+  });
 });
 
 module.exports = app;

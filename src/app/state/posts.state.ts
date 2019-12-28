@@ -1,4 +1,3 @@
-import { IPostsState } from './posts.state';
 import { Post } from '../models/post.model';
 import {
   createReducer,
@@ -33,15 +32,26 @@ export const addNewPost = createAction(
 
 export const removePost = createAction(
   '[Post] Remove Post',
-  props<{ post: Post }>()
+  props<{ id: string }>()
+);
+
+export const removePostSuccess = createAction(
+  '[Post] Remove Post Success',
+  props<{ id: string }>()
+);
+
+export const removePostFailure = createAction(
+  '[Post] Remove Post Failure'
 );
 
 export interface IPostsState {
   posts: Post[];
+  postIsDeleting: boolean;
 }
 
 export const initialPostsState = {
-  posts: []
+  posts: [],
+  postIsDeleting: false
 };
 
 const reducer = createReducer(
@@ -63,9 +73,22 @@ const reducer = createReducer(
       ...state,
       posts: [...state.posts, post]
     };
+  }),
+  on(removePost, (state) => {
+    return {
+      ...state,
+      postIsDeleting: true
+    }
+  }),
+  on(removePostSuccess, (state) => {
+    return {
+      ...state,
+      postIsDeleting: false
+    }
   })
 );
 
+// Mapper/Projector functions for use in selectors
 export function postsReducer(state, action) {
   return reducer(state, action);
 }
@@ -78,4 +101,10 @@ export const mapToPosts = (state: IPostsState): Post[] => {
   return state.posts;
 };
 
+export const mapToIsPostDeleting = (state: IPostsState): boolean => {
+  return state.postIsDeleting;
+}
+
+// Memoized selector functions
 export const getPostsSelector = createSelector(mapToRootState, mapToPosts);
+export const getIsPostDeletingSelector = createSelector(mapToRootState, mapToIsPostDeleting);
