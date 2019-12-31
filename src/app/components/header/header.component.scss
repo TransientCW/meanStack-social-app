@@ -1,0 +1,17 @@
+.links {
+    list-style: none;
+}
+
+.links li {
+    display: inline-block;
+    margin: 0 10px;
+}
+
+li > a {
+    color: #3fb5a3;
+    text-decoration: none;
+}
+
+li > a:hover {
+    color: #fff;
+}

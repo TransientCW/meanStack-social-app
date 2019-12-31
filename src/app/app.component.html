@@ -1,8 +1,4 @@
 <app-header></app-header>
 <main>
-  <app-post-create (newPostEmitter)="postsFacade.addNewPost($event)"></app-post-create>
-  <app-post-list
-    [posts]="postsFacade.posts$ | async"
-    (deletePostEmitter)="postsFacade.removePost($event.id)"
-    ></app-post-list>
+  <router-outlet></router-outlet>
 </main>

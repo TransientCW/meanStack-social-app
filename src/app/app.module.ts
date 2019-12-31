@@ -13,18 +13,19 @@ import {
   MatSnackBarModule,
   MatToolbarModule
 } from '@angular/material';
+import { StoreModule } from '@ngrx/store';
+import { EffectsModule } from '@ngrx/effects';
 
 import { AppComponent } from './app.component';
 import { AppEffects } from './app.effects';
-import { EffectsModule } from '@ngrx/effects';
 import { environment } from './../environments/environment.prod';
 import { HeaderComponent } from './components/header/header.component';
 import { PostCreateComponent } from './components/posts/post-create/post-create.component';
 import { PostsEffects } from './state/posts.effects';
 import { PostListComponent } from './components/posts/post-list/post-list.component';
 import { reducers } from './state';
-import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { AppRoutingModule } from './app-routing.module';
 
 @NgModule({
   declarations: [
@@ -34,6 +35,7 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
     PostListComponent
   ],
   imports: [
+    AppRoutingModule,
     BrowserModule,
     BrowserAnimationsModule,
     FormsModule,

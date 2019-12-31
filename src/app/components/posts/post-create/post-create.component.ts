@@ -1,6 +1,7 @@
 import { Component, Output, EventEmitter } from '@angular/core';
 import { Post } from 'src/app/models/post.model';
 import { NgForm } from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-post-create',
@@ -10,6 +11,8 @@ import { NgForm } from '@angular/forms';
 export class PostCreateComponent {
   @Output() newPostEmitter = new EventEmitter<Post>();
 
+  constructor(private router: Router) {}
+
   onAddPost(form: NgForm) {
     if (form.invalid) {
       return;
@@ -18,5 +21,6 @@ export class PostCreateComponent {
     const content = form.value.content || '';
     this.newPostEmitter.emit({ title, content });
     form.resetForm();
+    this.router.navigateByUrl('/');
   }
 }

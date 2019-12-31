@@ -60,6 +60,7 @@ app.post('/api/posts', (req, res) => {
   post.save().then(
     PostModel.find({}).then((posts) => {
       posts.push(post);
+      console.log('POST CREATED: ', post);
       res.status(200).json({
         message: 'Posts',
         posts: posts
