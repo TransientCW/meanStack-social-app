@@ -12,8 +12,16 @@ export class PostsService {
 
   constructor(@Inject(HttpClient) private http: HttpClient) {}
 
+  public editPost(post: Post): Observable<{message: string}> {
+    return this.http.patch<{message: any}>(this.url, post);
+  }
+
   public fetchPosts(): Observable<PostsFetch> {
     return this.http.get<PostsFetch>(this.url);
+  }
+
+  public fetchPost(id: string): Observable<Post> {
+    return this.http.get<Post>(this.url + '/' + id);
   }
 
   public addNewPost(

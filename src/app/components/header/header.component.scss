@@ -1,3 +1,11 @@
+.container {
+    display: flex;
+    flex-direction: row nowrap;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
 .links {
     list-style: none;
 }
@@ -7,11 +15,11 @@
     margin: 0 10px;
 }
 
-li > a {
+span > a {
     color: #3fb5a3;
     text-decoration: none;
 }
 
-li > a:hover {
+span > a:hover {
     color: #fff;
 }

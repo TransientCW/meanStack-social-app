@@ -9,9 +9,9 @@
       <span>{{ post.content }}</span>
       <mat-action-row>
         <mat-icon
-        (click)="deletePostEmitter.emit(post)"
+        (click)="postsFacade.removePost(post.id)"
         >delete</mat-icon>
-        <mat-icon (click)="editPostEmitter.emit(post)">edit</mat-icon>
+        <mat-icon (click)="editPost(post.id)">edit</mat-icon>
         <mat-spinner
           *ngIf="postsFacade.isPostDeleting$ | async"
           color="primary"

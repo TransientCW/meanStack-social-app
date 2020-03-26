@@ -22,7 +22,8 @@ import {
   fetchPostsFailure,
   addNewPost,
   removePostSuccess,
-  removePostFailure
+  removePostFailure,
+  editPost
 } from './posts.state';
 import { IRootState } from '.';
 import { PostsService } from './../services/posts.service';
@@ -54,6 +55,20 @@ export class PostsEffects {
         );
       })
     )
+  );
+
+  editPost$ = createEffect(() =>
+      this.actions$.pipe(
+        ofType(editPost),
+        filter(action => !!action && !!action.post),
+        map(action => action.post),
+        switchMap(post => {
+          return this.postsService.editPost(post).pipe(
+            filter(data => !!data),
+            map(fetchPosts)
+          )
+        })
+      )
   );
 
   fetchPosts$ = createEffect(() =>

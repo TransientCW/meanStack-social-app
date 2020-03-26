@@ -50,6 +50,30 @@ app.get('/api/posts', (req, res) => {
   })
 });
 
+// Single post GET route
+app.get('/api/posts/:id', (req, res) => {
+  const id = req.params.id;
+  PostModel.findOne({_id: id}).then(post => {
+    res.status(201).json({post})
+  });
+});
+
+// Single PATCH route for updating a post
+app.patch('api/posts/', (req, res) => {
+  const post = req.body.post;
+  PostModel.findByIdAndUpdate(
+    {_id: post.id},
+    {title: post.title, content: post.content}
+  ).then(message => {
+    console.log('OPERATION FROM PATCH: ', message);
+    res.status(201).json({message});
+  })
+  .catchError(err => {
+    console.log('ERROR: ', err);
+    res.status(500).json({err});
+  })
+});
+
 // Posts POST route
 app.post('/api/posts', (req, res) => {
   const post = new PostModel({
@@ -60,7 +84,6 @@ app.post('/api/posts', (req, res) => {
   post.save().then(
     PostModel.find({}).then((posts) => {
       posts.push(post);
-      console.log('POST CREATED: ', post);
       res.status(200).json({
         message: 'Posts',
         posts: posts

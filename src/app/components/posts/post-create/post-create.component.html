@@ -1,5 +1,5 @@
 <mat-card>
-  <form #postForm="ngForm" (submit)="onAddPost(postForm)">
+  <form #postForm="ngForm" (submit)="onAddPost()">
     <mat-form-field>
       <input
         name="title"
@@ -25,8 +25,11 @@
       ></textarea>
       <mat-error *ngIf="content.invalid">Please Enter Post Content</mat-error>
     </mat-form-field>
-    <button mat-raised-button color="accent" type="submit">
+    <button mat-raised-button color="accent" type="submit" *ngIf="!(postsFacade.isPostEditing$ | async)">
       Save Post
+    </button>
+    <button mat-raised-button color="primary" (click)="onAddPost(true)" *ngIf="!!(postsFacade.isPostEditing$ | async)">
+      Update Post
     </button>
   </form>
 </mat-card>

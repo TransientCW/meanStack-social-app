@@ -30,6 +30,15 @@ export const addNewPost = createAction(
   props<{ post: Post }>()
 );
 
+export const editPost = createAction(
+  '[Post] Edit Post',
+  props<{post: Post}>()
+);
+
+export const isEditing = createAction(
+  '[Post] Is Editing'
+);
+
 export const removePost = createAction(
   '[Post] Remove Post',
   props<{ id: string }>()
@@ -47,11 +56,13 @@ export const removePostFailure = createAction(
 export interface IPostsState {
   posts: Post[];
   postIsDeleting: boolean;
+  postIsEditing: boolean;
 }
 
 export const initialPostsState = {
   posts: [],
-  postIsDeleting: false
+  postIsDeleting: false,
+  postIsEditing: false
 };
 
 const reducer = createReducer(
@@ -85,6 +96,18 @@ const reducer = createReducer(
       ...state,
       postIsDeleting: false
     }
+  }),
+  on(isEditing, (state) => {
+    return {
+      ...state,
+      postIsEditing: true
+    }
+  }),
+  on(editPost, (state) => {
+    return {
+      ...state,
+      postIsEditing: false
+    }
   })
 );
 
@@ -105,6 +128,9 @@ export const mapToIsPostDeleting = (state: IPostsState): boolean => {
   return state.postIsDeleting;
 }
 
+export const mapToIsPostEditing = (state: IPostsState): boolean => state.postIsEditing;
+
 // Memoized selector functions
 export const getPostsSelector = createSelector(mapToRootState, mapToPosts);
 export const getIsPostDeletingSelector = createSelector(mapToRootState, mapToIsPostDeleting);
+export const getIsPostEditingSelector = createSelector(mapToRootState, mapToIsPostEditing);

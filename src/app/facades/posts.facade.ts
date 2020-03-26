@@ -1,4 +1,4 @@
-import { fetchPosts, getIsPostDeletingSelector } from './../state/posts.state';
+import { fetchPosts, getIsPostDeletingSelector, editPost, isEditing, getIsPostEditingSelector } from './../state/posts.state';
 import { Store } from '@ngrx/store';
 
 import { Observable } from 'rxjs';
@@ -21,6 +21,18 @@ export class PostsFacade {
     return this.store.select(getIsPostDeletingSelector);
   }
 
+  public get isPostEditing$(): Observable<boolean> {
+    return this.store.select(getIsPostEditingSelector);
+  }
+
+  public editPost(post: Post): void {
+    this.store.dispatch(editPost({post}));
+  }
+
+  public userIsEditingPost(): void {
+    this.store.dispatch(isEditing());
+  }
+
   public fetchPosts(): void {
     this.store.dispatch(fetchPosts());
   }
@@ -36,4 +48,7 @@ export class PostsFacade {
       this.store.dispatch(removePost({ id }));
     }
   }
+
+  // Helper functions outside the store
+  
 }
